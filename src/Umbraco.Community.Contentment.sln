@@ -51,8 +51,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Editors", "Editors", "{A529
 		..\docs\editors\data-list.md = ..\docs\editors\data-list.md
 		..\docs\editors\editor-notes.md = ..\docs\editors\editor-notes.md
 		..\docs\editors\icon-picker.md = ..\docs\editors\icon-picker.md
-		..\docs\editors\notes.md = ..\docs\editors\notes.md
 		..\docs\editors\list-items.md = ..\docs\editors\list-items.md
+		..\docs\editors\notes.md = ..\docs\editors\notes.md
 		..\docs\editors\number-input.md = ..\docs\editors\number-input.md
 		..\docs\editors\render-macro.md = ..\docs\editors\render-macro.md
 		..\docs\editors\social-links.md = ..\docs\editors\social-links.md
@@ -138,11 +138,11 @@ Global
 		{781DFB27-8B65-4D12-8107-62F1565D9AD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{781DFB27-8B65-4D12-8107-62F1565D9AD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{975B8A1E-4B37-4631-8175-96B9B9DC05AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{975B8A1E-4B37-4631-8175-96B9B9DC05AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{975B8A1E-4B37-4631-8175-96B9B9DC05AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{975B8A1E-4B37-4631-8175-96B9B9DC05AD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F6B67590-A9C2-477A-A972-7A8595C8E07D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F6B67590-A9C2-477A-A972-7A8595C8E07D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6B67590-A9C2-477A-A972-7A8595C8E07D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F6B67590-A9C2-477A-A972-7A8595C8E07D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,7 +11,7 @@ angular.module("umbraco").controller("Umbraco.Community.Contentment.DataEditors.
     "overlayService",
     function ($scope, editorService, focusService, localizationService, overlayService) {
 
-        // console.log("item-picker.model", $scope.model);
+        //console.log("item-picker.model", $scope.model);
 
         var defaultConfig = {
             addButtonLabelKey: "general_add",
@@ -57,12 +57,14 @@ angular.module("umbraco").controller("Umbraco.Community.Contentment.DataEditors.
             vm.defaultIcon = config.defaultIcon;
             vm.displayMode = config.displayMode || "list";
             vm.allowAdd = config.maxItems === 0 || $scope.model.value.length < config.maxItems;
-            vm.allowEdit = false;
+            vm.allowEdit = true; // S6 We want to allow editing (or at least opening) Contentment core doesn't have any code to handle this even if forced to 'true'...only looks like it is used for macro-picker.js
+            vm.allowOpen = true; // S6 TODO Forcing true to try and access infinite editing
             vm.allowRemove = true;
             vm.allowSort = Object.toBoolean(config.disableSorting) === false && config.maxItems !== 1;
 
             vm.addButtonLabelKey = config.addButtonLabelKey || "general_add";
 
+            vm.open = open; // S6 Added (keep names conventional in case that matters)
             vm.add = add;
             vm.remove = remove;
             vm.sort = () => {
@@ -108,6 +110,100 @@ angular.module("umbraco").controller("Umbraco.Community.Contentment.DataEditors.
                     $scope.umbProperty.setPropertyActions(vm.propertyActions);
                 }
             }
+        };
+
+        /* S6 TODO Make "edit" and/or "open" functions to support built-in U10 picker infinite editing
+         * U10 core sets "on-open" attribute to a custom openEditor() method:
+         * https://github.com/umbraco/Umbraco-CMS/blob/0c595ccc5f88750a8f547e4bbbe58c457864094d/src/Umbraco.Web.UI.Client/src/views/propertyeditors/contentpicker/contentpicker.controller.js#L346
+         * Determines type being edited (ie. member/doctype/etc.) and then calls appropriate editorService method
+         * Try copy/pasting this entire method, or creating a lite version similar to the "item-picker.js add()" method further below
+         * */
+        
+        function open(item) {
+            console.log('s6open item ', item);
+
+            /* Innards of U10 openEditor, but that operates on a "node" not a custom contentment "item", which only has a UDI and some labels
+               Let's start by trying to dup the existing "edit" method from the Contentment configuration-editor.js?
+               ...though that is probably a sidebar editor instead of a fullscreen infinite editor
+            */
+
+            /* Content "Item" schema:
+             * contentment "item" is an object:
+                {
+                    "description": "",
+                    "icon": "",
+                    "name": "",
+                    "value": "{udi}"
+                }
+             * */
+            var editor = {
+                id: item.value, // udi
+                submit: function (model) {
+                    console.log('s6 item-picker.js submit model ', model);
+                    //var node = entityType === "Member" ? model.memberNode :
+                    //    entityType === "Media" ? model.mediaNode :
+                    //        model.contentNode;
+
+                    // update the node
+                    //item.name = node.name;
+
+                    //if (entityType !== "Member") {
+                    //    if (entityType === "Document") {
+                    //        item.published = node.hasPublishedVersion;
+                    //    }
+                    //    entityResource.getUrl(node.id, entityType).then(function (data) {
+                    //        item.url = data;
+                    //    });
+                    //}
+                    editorService.close();
+                },
+                close: function () {
+                    editorService.close();
+                }
+            };
+
+            // Just assume "content" for now
+            editorService.contentEditor(editor);
+            
+
+            // Native U10 open, based on "node" not contentment "item"
+            //var editor = {
+            //    id: entityType === "Member" ? item.key : item.id,
+            //    submit: function (model) {
+
+            //        var node = entityType === "Member" ? model.memberNode :
+            //            entityType === "Media" ? model.mediaNode :
+            //                model.contentNode;
+
+            //        // update the node
+            //        item.name = node.name;
+
+            //        if (entityType !== "Member") {
+            //            if (entityType === "Document") {
+            //                item.published = node.hasPublishedVersion;
+            //            }
+            //            entityResource.getUrl(node.id, entityType).then(function (data) {
+            //                item.url = data;
+            //            });
+            //        }
+            //        editorService.close();
+            //    },
+            //    close: function () {
+            //        editorService.close();
+            //    }
+            //};
+
+            //switch (entityType) {
+            //    case "Document":
+            //        editorService.contentEditor(editor);
+            //        break;
+            //    case "Media":
+            //        editorService.mediaEditor(editor);
+            //        break;
+            //    case "Member":
+            //        editorService.memberEditor(editor);
+            //        break;
+            //}
         };
 
         function add() {
@@ -166,7 +262,7 @@ angular.module("umbraco").controller("Umbraco.Community.Contentment.DataEditors.
         };
 
         function remove($index) {
-
+            console.log('s6 remove item ', $index);
             focusService.rememberFocus();
 
             if (config.confirmRemoval === true) {

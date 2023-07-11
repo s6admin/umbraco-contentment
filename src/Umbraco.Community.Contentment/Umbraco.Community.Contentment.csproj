@@ -41,9 +41,12 @@
       <Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
     </ItemGroup>
   </Target>
-
+  <!-- S6 Removed. Prevents build with "exited with code -196608" -->
   <Target Name="ContentmentPrepareAssets" AfterTargets="PreBuildEvent" Condition="'$(TargetFramework)' == 'net7.0'">
     <Exec Command="powershell -NoProfile -ExecutionPolicy RemoteSigned -file $(ProjectDir)..\..\build\build-assets.ps1 -ProjectDir $(ProjectDir)" />
+  </Target>
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="echo 'S6 $ProjectDir = '$(ProjectDir)" />
   </Target>
 
 </Project>
