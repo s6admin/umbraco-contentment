@@ -57,8 +57,8 @@ angular.module("umbraco").controller("Umbraco.Community.Contentment.DataEditors.
             vm.defaultIcon = config.defaultIcon;
             vm.displayMode = config.displayMode || "list";
             vm.allowAdd = config.maxItems === 0 || $scope.model.value.length < config.maxItems;
-            vm.allowEdit = true; // S6 We want to allow editing (or at least opening) Contentment core doesn't have any code to handle this even if forced to 'true'...only looks like it is used for macro-picker.js
-            vm.allowOpen = true; // S6 TODO Forcing true to try and access infinite editing
+            //vm.allowEdit = true; // S6 We want to allow editing (or at least opening) Contentment core doesn't have any code to handle this even if forced to 'true'...only looks like it is used for macro-picker.js
+            vm.allowOpen = true; // S6 TODO Forcing true to try and access infinite editing (TODO Make configuration toggle)
             vm.allowRemove = true;
             vm.allowSort = Object.toBoolean(config.disableSorting) === false && config.maxItems !== 1;
 
@@ -120,7 +120,7 @@ angular.module("umbraco").controller("Umbraco.Community.Contentment.DataEditors.
          * */
         
         function open(item) {
-            console.log('s6open item ', item);
+            //console.log('s6open item ', item);
 
             /* Innards of U10 openEditor, but that operates on a "node" not a custom contentment "item", which only has a UDI and some labels
                Let's start by trying to dup the existing "edit" method from the Contentment configuration-editor.js?
@@ -139,7 +139,7 @@ angular.module("umbraco").controller("Umbraco.Community.Contentment.DataEditors.
             var editor = {
                 id: item.value, // udi
                 submit: function (model) {
-                    console.log('s6 item-picker.js submit model ', model);
+                    //console.log('s6 item-picker.js submit model ', model);
                     //var node = entityType === "Member" ? model.memberNode :
                     //    entityType === "Media" ? model.mediaNode :
                     //        model.contentNode;
@@ -262,7 +262,7 @@ angular.module("umbraco").controller("Umbraco.Community.Contentment.DataEditors.
         };
 
         function remove($index) {
-            console.log('s6 remove item ', $index);
+            //console.log('s6 remove item ', $index);
             focusService.rememberFocus();
 
             if (config.confirmRemoval === true) {
