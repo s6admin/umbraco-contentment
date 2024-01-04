@@ -58,11 +58,16 @@ angular.module("umbraco").controller("Umbraco.Community.Contentment.DataEditors.
             vm.displayMode = config.displayMode || "list";
             vm.allowAdd = config.maxItems === 0 || $scope.model.value.length < config.maxItems;
             //vm.allowEdit = true; // S6 We want to allow editing (or at least opening) Contentment core doesn't have any code to handle this even if forced to 'true'...only looks like it is used for macro-picker.js
+            /* S6 Inject base editUrl so property editors can load picked nodes in separate tabs instead of infinite editing mode.
+              This probably needs to be suffixed with each vm.item nodeId (either explicitly in their data or dynamically in the umb-preview-node.html?)
+              But this might not be the right place to do this? These items are probably the PICKABLE ones...not the ones selected by the user.
+            */
+            //vm.editUrl = "umbraco/#/content/content/edit/";  // S6 can force the guid portion of a udi as an editUrl slug and U10 will route correctly (like when using an int id)
             vm.allowOpen = true; // S6 TODO Forcing true to try and access infinite editing (TODO Make configuration toggle)
-            vm.allowRemove = true;
+            vm.allowRemove = true; 
             vm.allowSort = Object.toBoolean(config.disableSorting) === false && config.maxItems !== 1;
 
-            vm.addButtonLabelKey = config.addButtonLabelKey || "general_add";
+            vm.addButtonLabelKey = config.addButtonLabelKey || "general_add"; 
 
             vm.open = open; // S6 Added (keep names conventional in case that matters)
             vm.add = add;
@@ -71,16 +76,36 @@ angular.module("umbraco").controller("Umbraco.Community.Contentment.DataEditors.
                 $scope.model.value = vm.items.map(item => item.value);
             };
 
-            vm.items = [];
+            vm.items = []; // S6 Why is vm.items emptied here after it was mapped to $scope.model.value above?
 
             if ($scope.model.value.length > 0 && config.items.length > 0) {
                 var orphaned = [];
+                
+                // S6 Set editUrl values for ALL items (config.items or $scope.model.value or vm.items?)
+                config.items.forEach(ci => {
+                    if (ci.value != undefined && typeof ci.value === "string") {
+                        if (ci.value.indexOf("umb://") > -1) {
+                            // S6 value is a UDI, extract data portion for editUrl slug
+                            ci.editUrl = '/umbraco/#/content/content/edit/' + ci.value.substring(ci.value.lastIndexOf('/') + 1);
+                        } else {
+                            // S6 assume Guid or int, can use entire value for editUrl slug
+                            ci.editUrl = '/umbraco/#/content/content/edit/' + ci.value;
+                        }                        
+                    }
+                });
+
+                console.log('s6contentment config.items: ', config.items);
+                console.log('s6contentment $scope.model.value: ', $scope.model.value);
 
                 $scope.model.value.forEach(v => {
                     var item = config.items.find(x => x.value === v);
-                    if (item) {
+                    if (item) {                        
+                        //if (item.value != undefined && typeof item.value === "string") {
+                        //    item.editUrl = 'umbraco/#/content/content/edit/' + item.value.substring(item.value.lastIndexOf('/') + 1); // S6 try injecting editUrl for each item? item only has icon/name/value (udi) ... we need id                        
+                        //}                        
                         vm.items.push(Object.assign({}, item));
                     } else {
+                        // S6 "item" is null/false here?
                         orphaned.push(v);
                     }
                 });
@@ -165,7 +190,6 @@ angular.module("umbraco").controller("Umbraco.Community.Contentment.DataEditors.
             // Just assume "content" for now
             editorService.contentEditor(editor);
             
-
             // Native U10 open, based on "node" not contentment "item"
             //var editor = {
             //    id: entityType === "Member" ? item.key : item.id,
