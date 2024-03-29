@@ -24,6 +24,7 @@
                 getItemDescription: "<?",
                 ngModel: "=",
                 onAdd: "<?",
+                onOpen: "<?", // S6
                 onEdit: "<?",
                 onRemove: "<?",
                 onSort: "<?",
@@ -33,7 +34,7 @@
             controllerAs: "vm",
             controller: [
                 "$scope",
-                "localizationService",
+                "localizationService", 
                 function ($scope, localizationService) {
 
                     var vm = this;
@@ -90,7 +91,8 @@
                         vm.add = add;
                         vm.canEdit = canEdit;
                         vm.canRemove = canRemove;
-                        vm.edit = edit;
+                        vm.edit = edit;                        
+                        vm.open = open; // S6 added (maybe use edit instead if necessary)
                         vm.populate = populate;
                         vm.populateStyle = populateStyle;
                         vm.remove = remove;
@@ -151,6 +153,14 @@
                             vm.onEdit($index);
                         }
                     };
+
+                    // S6 Adding to try reaching infinite editor
+                    function open(item) {
+                        console.log('s6 _components.js open ', item);
+                        if (typeof vm.onOpen === "function") {
+                            vm.onOpen(item);
+                        }
+                    }
 
                     function populate(item, $index, propertyName) {
                         if (typeof vm.getItem === "function") {
