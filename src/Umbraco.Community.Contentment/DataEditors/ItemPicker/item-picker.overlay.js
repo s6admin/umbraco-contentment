@@ -7,7 +7,7 @@ angular.module("umbraco").controller("Umbraco.Community.Contentment.Overlays.Ite
     "$scope",
     function ($scope) {
 
-        // console.log("item-picker-overlay.model", $scope.model);
+         console.log("item-picker-overlay.model", $scope.model);
 
         var defaultConfig = {
             title: "Select...",

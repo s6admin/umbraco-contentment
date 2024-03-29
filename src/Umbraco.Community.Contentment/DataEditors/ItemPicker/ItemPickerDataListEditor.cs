@@ -14,18 +14,18 @@ using Umbraco.Cms.Core.IO;
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Extensions;
 using UmbConstants = Umbraco.Cms.Core.Constants;
-#endif
+#endif  
 
 namespace Umbraco.Community.Contentment.DataEditors
 {
-    public sealed class ItemPickerDataListEditor : IDataListEditor
+    public sealed class ItemPickerDataListEditor : IDataListEditor     
     {
         internal const string DataEditorViewPath = Constants.Internals.EditorsPathRoot + "item-picker.html";
         internal const string DataEditorOverlayViewPath = Constants.Internals.EditorsPathRoot + "item-picker.overlay.html";
 
         private readonly IIOHelper _ioHelper;
 
-        public ItemPickerDataListEditor(IIOHelper ioHelper)
+        public ItemPickerDataListEditor(IIOHelper ioHelper) 
         {
             _ioHelper = ioHelper;
         }
