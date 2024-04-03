@@ -3,11 +3,11 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
 
-<!-- S6 Added on-open and allow-open attribute -->
+<!-- S6 make allow-open attribute only visible if allow-edit is not available -->
 <div ng-controller="Umbraco.Community.Contentment.DataEditors.ItemPicker.Controller as vm">
     <contentment-items-editor ng-model="vm.items"
                               add-button-label-key="vm.addButtonLabelKey"
-                              allow-open="true"
+                              allow-open="vm.allowEdit == undefined || vm.allowEdit == false"
                               allow-add="vm.allowAdd"
                               allow-edit="vm.allowEdit"
                               allow-remove="vm.allowRemove"

@@ -2,9 +2,19 @@
    - This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
+<!-- S6 Contentment project now always passes an editUrl value for each item.
+    The umb-node-preview natively detects this and shows a traditional
+    hyperlink for "Edit" instead of a dynamic js button.
+    The "Open" option has been wired up to an infinite editor.
+    Only one of these options should be shown at a time, depending on admin preference.
+    Could eventually make this a toggleable config/setting.
+    For now, if an editUrl value is present, the Open option will automatically be hidden
+    by the {allow-open="item.editUrl == undefined"} rule
+    -->
 
 <div class="umb-contentpicker">
     <div ui-sortable="vm.sortableOptions" ng-model="vm.ngModel">
+        <!--<span>s6 debug output vm.ngModel {{vm.ngModel}}</span>-->
         <umb-node-preview ng-attr-single="{{vm.isSingle}}"
                           ng-repeat="item in vm.ngModel track by $index"
                           icon="vm.populate(item, $index, 'icon')"
@@ -13,6 +23,10 @@
                           sortable="vm.allowSort"
                           allow-edit="vm.canEdit(item, $index)"
                           allow-remove="vm.canRemove(item, $index)"
+                          allow-open="item.editUrl == undefined"
+                          editUrl="item.editUrl"
+                          edit-url="item.editUrl"
+                          on-open="vm.open(item)"
                           on-edit="vm.edit($index)"
                           on-remove="vm.remove($index)">
         </umb-node-preview>
